@@ -1,2 +1,2 @@
-# Avalia-o-Final
+# Avaliacao-Final
 Avaliação Final EDDA/LEDA
