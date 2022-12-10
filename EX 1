@@ -18,7 +18,7 @@ struct Stack {
 
 int exibir_qtd(struct Stack *&pilha) { return pilha->qty; }
 
-// FUNÇÃO - VERIFICA SE A PILHA ESTÁ CHEIA
+
 int verifica_cheia(struct Stack *&pilha) {
 
   if (pilha->qty == pilha->max_items) {
