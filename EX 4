@@ -1,169 +1,144 @@
 #include <stdio.h>
-#include <string.h>
+#define MAX 2147483647 
+#include <stdlib.h>
 
+typedef struct Node Node;
 
-
-struct fila{
-  int item[200];
-  int quantidade;
+struct Node{
+  int number;
+  struct Node *next;
 };
 
+Node filas[3];
+int qtd=0;
+  
+void InsercaoFilas(){
+  
+  int num, num_ant;
+  int i = 0, n = 0, x = 0, y = 0;
+  
+  printf("Digite a 1º fila em ordem crescente:\n");
+  printf("\nQuebre a ordem para sair\n");
+  
+  for(;n==0; i++){
+    
+    Node *aux, *novo = malloc(sizeof(Node));
+    
+    printf("\n%dº número:\n", i+1);
+    scanf("%d", &num);
+    
+    novo->number=num;
+    novo->next=NULL;
+    
+    if(x==0){
+      filas[0]=*novo;
+      x=1;
+      num_ant=num;
+      qtd++;
+    } 
+    else if(num>=num_ant){
+      aux=&filas[0];
+      while(aux->next!=NULL){
+        aux=aux->next;
+      }
+      aux->next=novo;
+      num_ant=num;
+      qtd++;
+    }
+    else {
+      n=1;
+    }
+  }
 
-void criarfila(struct fila * fila){
-    memset(fila, 0, sizeof(struct fila));
+  printf("\nDigite a 2º fila em ordem crescente:\n");
+  printf("\nQuebre a ordem para sair\n");
+  
+  for(i = 0, n = 0, x = 0;n==0;i++){
+    
+    Node *aux, *novo = malloc(sizeof(Node));
+    
+    printf("\n%dº número:\n", i+1);
+    scanf("%d", &num);
+    
+    novo->number=num;
+    novo->next=NULL;
+    
+    if(x==0){
+      filas[1] = *novo;
+      x = 1;
+      num_ant=num;
+      qtd++;
+    }
+    else if(num>=num_ant){
+      aux = &filas[1];
+      while(aux->next){
+        aux=aux->next;
+      }
+      aux->next=novo;
+      num_ant=num;
+      qtd++;
+    }
+    else {
+      n=1;
+    }
+  }
+
+  for(i=0, n=0, x=0;i<qtd;i++){
+    Node* aux, *novo = malloc(sizeof(Node));
+    int NextNum;
+    
+    if(filas[0].number<=filas[1].number && x<2){
+      NextNum=filas[0].number;
+      if(x == 1)
+        x=2;
+        filas[0].number=MAX;
+      if(filas[0].next&&x==0){
+        filas[0]=*filas[0].next;
+        if(!filas[0].next)
+          x=1;
+      }
+    }
+    else if(y<2){
+      NextNum = filas[1].number;
+      if(y == 1)
+        y=2;
+        filas[1].number=MAX;
+      if(filas[1].next&&y == 0){
+        filas[1] = *filas[1].next;
+        if(!filas[1].next)
+          y = 1;
+      }
+    }
+    novo->number = NextNum;
+    novo->next = NULL;
+    
+    if(n==0){
+      filas[2] = *novo;
+      n=1;
+    }
+    else {
+      aux = &filas[2];
+      while(aux->next){
+        aux=aux->next;
+      }
+      aux->next = novo;
+    }
+  }
+  
 }
 
 
-int enqueue(struct fila * fila, int valor){
-    
-    fila -> item[fila -> quantidade++] = valor;
+int main(void) {
+  
+  InsercaoFilas();
+
+  printf("\nFila mista em ordem crescente: ");
+  for(int i = 0;filas[2].next;i++){
+    printf("%d ", filas[2].number);
+    filas[2] = *filas[2].next;
+  }
+  printf("%d", filas[2].number);
   
     return 0;
-}
 
-
-void listagemA(struct fila * fila){
-    
-  int i = 0;
-
-  if(!fila -> quantidade){
-    printf("\nA fila A está vazia.\n");
-    return;
-}
-
-    printf("\nFila A:\n");
-    
-    for(i = 0; i <= fila -> quantidade - 1; i++){
-     printf("%dª Posição: %d\n", i + 1, fila -> item[i]);
   }
-}
-
-void listagemB(struct fila * fila){
-    
-  int i = 0;
-
-  if(!fila -> quantidade){
-    printf("\nA fila B está vazia.\n");
-    return;
-}
-
-    printf("\nFila B:\n");
-    
-    for(i = 0; i <= fila -> quantidade - 1; i++){
-     printf("%dª Posição: %d\n", i + 1, fila -> item[i]);
-  }
-}
-
-int enqueueC(struct fila * fila, int valor){
-    
-    fila -> item[fila -> quantidade++] = valor;
-  
-    return 0;
-}
-
-
-int enqueueFilaC(struct fila * filaFinal, struct fila * filaInicial){
-    
-  int i = 0;
-
-   for(i = 0; i < filaInicial -> quantidade; i++){
-     enqueueC(filaFinal, filaInicial -> item[i]);
-  }   
-
-    return 0;
-}
-
-void listagemC(struct fila * fila){
-    
-  int i = 0;
-
-  if(!fila -> quantidade){
-    printf("\nA fila C está vazia.\n");
-    return;
-}
-
-    printf("\nfila C:\n");
-    
-    for(i = 0; i <= fila -> quantidade - 1; i++){
-     printf("%dª Posição: %d\n", i + 1, fila -> item[i]);
-  }
-}
-
-
-void crescente(struct fila * fila){
-  int i = 0;
-  int j = 0;
-  int aux = 0;
-
-    for(i = 0; i < fila -> quantidade; i++){
-      for(j = i + 1; j < fila -> quantidade; j++){
-        if(fila -> item[i] > fila -> item[j]){
-                aux = fila -> item[i];
-                fila -> item[i] = fila -> item[j];
-                fila -> item[j] = aux;
-   }
-  }
- }
-}
-
-void decrescente(struct fila * fila){
-  int i = 0;
-  int j = 0;
-  int aux = 0;
-
-    for(i = 0; i < fila -> quantidade; i++){
-      for(j = i + 1; j < fila -> quantidade; j++){
-        if(fila -> item[i] > fila -> item[j]){
-                aux = fila -> item[i];
-                fila -> item[i] = fila -> item[j];
-                fila -> item[j] = aux;
-   }
-  }
- }
-}
-
-
-int main(void){
-    
-   struct fila filaA;
-   struct fila filaB;
-   struct fila filaC;
-
-   criarfila(&filaA);
-   criarfila(&filaB);
-   criarfila(&filaC);
-
-   enqueue(&filaA, 1);
-   enqueue(&filaA, 3);
-   enqueue(&filaA, 5);
-   enqueue(&filaA, 7);
-   enqueue(&filaA, 9);
-   enqueue(&filaA, 11);
-   enqueue(&filaA, 13);
-   enqueue(&filaA, 15);
-   enqueue(&filaA, 17);
-   enqueue(&filaA, 19);
-
-   listagemA(&filaA);
-   
-   enqueue(&filaB, 0);
-   enqueue(&filaB, 2);
-   enqueue(&filaB, 4);
-   enqueue(&filaB, 6);
-   enqueue(&filaB, 8);
-   enqueue(&filaB, 10);
-   enqueue(&filaB, 12);
-   enqueue(&filaB, 14);
-   enqueue(&filaB, 16);
-   enqueue(&filaB, 18);
-
-   listagemB(&filaB);
-
-   enqueueFilaC(&filaC, &filaA);
-   enqueueFilaC(&filaC, &filaB);
-
-   crescente(&filaC);
-   listagemC(&filaC);
-
-    return 0;
-}
